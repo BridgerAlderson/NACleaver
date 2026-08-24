@@ -1,0 +1,37 @@
+recon:
+  eapol_timeout: 30
+  dhcp_timeout: 10
+  cdp_lldp_timeout: 15
+
+mab:
+  harvest_duration: 60
+  min_score: 0.0
+
+dot1x:
+  default_timeout: 15
+  spray_delay: 2.0
+  preferred_backend: auto
+  method_order:
+    - peap_mschapv2
+    - ttls_mschapv2
+    - ttls_pap
+    - pwd
+    - md5
+
+relay:
+  auth_timeout: 90
+  dhcp_timeout: 15
+  bridge_name: nacleaver_br
+
+posture:
+  probe_timeout: 5
+  ise_ports: [443, 8443, 8905]
+  clearpass_ports: [443, 8081]
+  forescout_ports: [443, 1040]
+
+post_auth:
+  arp_sweep: true
+  arp_timeout: 2
+  port_scan: true
+  port_scan_timeout: 0.5
+  ports: [22, 80, 443, 445, 3389, 8080, 8443, 8905, 8081, 1040]
