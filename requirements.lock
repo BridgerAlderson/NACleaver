@@ -1,0 +1,14 @@
+# Exact runtime environment used by the code-checked test baseline.
+# Refresh deliberately after reviewing upstream release notes and rerunning CI.
+certifi==2026.7.22
+charset-normalizer==3.5.1
+idna==3.20
+markdown-it-py==4.2.0
+mdurl==0.1.2
+netifaces==0.11.0
+Pygments==2.21.0
+PyYAML==6.0.3
+requests==2.34.2
+rich==15.0.0
+scapy==2.7.0
+urllib3==2.8.0

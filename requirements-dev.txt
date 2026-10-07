@@ -1,0 +1,8 @@
+-r requirements.lock
+
+# Bounded development tooling; CI records the resolved versions on every run.
+pytest>=9.0,<10
+pytest-cov>=6.0,<8
+ruff>=0.14,<1
+bandit>=1.8,<2
+pip-audit>=2.9,<3

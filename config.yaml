@@ -1,22 +1,42 @@
 recon:
   eapol_timeout: 30
   dhcp_timeout: 10
-  cdp_lldp_timeout: 15
+  http_timeout: 5
 
 mab:
   harvest_duration: 60
-  min_score: 0.0
+  min_score: 15.0
+  dhcp_timeout: 30
 
 dot1x:
   default_timeout: 15
   spray_delay: 2.0
   preferred_backend: auto
+  # RADIUS server validation defaults to the operating system CA store.
+  server_ca_cert: null
+  server_domain: null
+  anonymous_identity: null
+  private_key_password: null
+  insecure_no_server_cert: false
+  # EAP-FAST needs a persistent writable PAC store. Keep null unless FAST is
+  # explicitly in method_order or selected with --eap-method fast.
+  pac_file: null
+  fast_provisioning: 0
+  # SIM/AKA/AKA' use an actual PC/SC SIM/USIM. Empty string selects the first
+  # reader, while sim_number selects a slot on multi-SIM implementations.
+  sim_pin: null
+  sim_pcsc: ""
+  sim_number: null
   method_order:
     - peap_mschapv2
     - ttls_mschapv2
     - ttls_pap
     - pwd
     - md5
+  # TEAP is supported as an explicit method, but is intentionally not in the
+  # portable default order because many distro wpa_supplicant builds omit it.
+  # Run `doctor --mode dot1x` and add teap_mschapv2 only when the capability
+  # check reports support.
 
 relay:
   auth_timeout: 90
@@ -25,13 +45,57 @@ relay:
 
 posture:
   probe_timeout: 5
-  ise_ports: [443, 8443, 8905]
-  clearpass_ports: [443, 8081]
-  forescout_ports: [443, 1040]
+  # null enables maintained built-in evidence signatures for Cisco ISE,
+  # ClearPass, Forescout, FortiNAC, and PacketFence. Supply a list with the
+  # same schema to use engagement-specific product ports/HTTP markers. HTTPS
+  # probes verify TLS by default; set verify_tls: false only as an explicit
+  # engagement exception for a self-signed appliance.
+  signatures: null
+  # Engagement-specific portal workflows. No synthetic compliance payloads are
+  # sent when this list is empty. Each workflow must explicitly match the
+  # detected redirect host; steps are restricted to the same HTTP origin.
+  http_workflows: []
+  # Example:
+  # http_workflows:
+  #   - name: authorized-guest-portal
+  #     match_hosts: [portal.client.example]
+  #     # Agent workflows can instead match detected context and define base_url:
+  #     # match_posture_types: [forescout_agent]
+  #     # match_products: [Forescout]
+  #     # base_url: https://nac.client.example/
+  #     verify_tls: true
+  #     steps:
+  #       - name: accept-authorized-use-policy
+  #         method: POST
+  #         path: /api/accept
+  #         json: {accepted: true}
+  #         expected_status: [200]
+  #         expected_json: {status: accepted}
+
+verification:
+  # "any" accepts one successful target; "all" requires every target.
+  policy: any
+  # Empty uses the built-in interface-bound public connectivity probe. For
+  # internal-only engagements, define authoritative HTTP and/or TCP targets.
+  targets: []
+  # Example:
+  # targets:
+  #   - name: internal-health
+  #     type: http
+  #     url: https://health.client.example/nac-test
+  #     verify_tls: true
+  #     expected_status: [200]
+  #     body_contains: [authorized]
+  #   - name: approved-service
+  #     type: tcp
+  #     host: 10.20.30.40
+  #     port: 443
 
 post_auth:
   arp_sweep: true
   arp_timeout: 2
   port_scan: true
   port_scan_timeout: 0.5
-  ports: [22, 80, 443, 445, 3389, 8080, 8443, 8905, 8081, 1040]
+  max_hosts: 1024
+  nac_probe_timeout: 1.0
+  ports: [22, 80, 443, 445, 1040, 1443, 3389, 8080, 8081, 8443, 8905]

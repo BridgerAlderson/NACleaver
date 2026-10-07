@@ -8,6 +8,11 @@ __pycache__/
 dist/
 build/
 .eggs/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.ruff_cache/
 
 # Virtual environments
 venv/
@@ -19,6 +24,18 @@ data/oui.db
 data/oui_full.csv
 output/
 
+# Engagement-local material (never publish credentials or packet captures)
+.env
+.env.*
+creds*.txt
+*.pcap
+*.pcapng
+*.pac
+*.pem
+*.key
+*.p12
+*.pfx
+
 # Editor / OS
 .DS_Store
 .idea/
@@ -26,6 +43,3 @@ output/
 *.swp
 *.swo
 *~
-
-# Temp files written by wpa_supplicant backend
-/tmp/nacleaver_wpa_*
