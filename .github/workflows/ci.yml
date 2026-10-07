@@ -30,7 +30,7 @@ jobs:
       - name: Lint
         run: ruff check .
       - name: Unit tests and coverage
-        run: pytest --cov --cov-report=term-missing
+        run: python -m pytest --cov --cov-report=term-missing
 
   security:
     runs-on: ubuntu-latest

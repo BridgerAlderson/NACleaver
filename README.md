@@ -1125,7 +1125,8 @@ Pull requests are welcome. Please:
 - Catch specific exception types — no bare `except:`
 - Run `python3 -m compileall -q nacleaver.py core modules tests`
 - Run `ruff check nacleaver.py core modules tests`
-- Run `pytest --cov --cov-report=term-missing`
+- Run `python3 -m pytest --cov --cov-report=term-missing` using the interpreter where the
+  locked dependencies were installed
 - Run `bandit -q -r nacleaver.py core modules`
 - Run `pip-audit -r requirements.lock`
 - Do not add features that cannot be fully implemented — no stubs, no TODOs
